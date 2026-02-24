@@ -12,59 +12,18 @@ A streamlined knowledge base for Huawei Ascend NPU development, structured as AI
 
 ## Installation
 
-### Claude Code
+### Prerequisites
+
+You need `npx` installed. Download Node.js (includes npx) from:
+- https://nodejs.org/en/download
+
+### Install Skills
 
 ```bash
-# Copy skills to Claude Code directory
-cp -r npu-smi ~/.claude/skills/
-cp -r hccl-test ~/.claude/skills/
-cp -r atc-model-converter ~/.claude/skills/
+npx skills add ascend-ai-coding/awesome-ascend-skills
 ```
 
-### OpenCode
-
-```bash
-# Project-level (recommended)
-mkdir -p .opencode/skills
-cp -r npu-smi .opencode/skills/
-cp -r hccl-test .opencode/skills/
-cp -r atc-model-converter .opencode/skills/
-
-# User-level
-cp -r npu-smi ~/.config/opencode/skills/
-cp -r hccl-test ~/.config/opencode/skills/
-cp -r atc-model-converter ~/.config/opencode/skills/
-```
-
-### Codex
-
-```bash
-# Project-level
-mkdir -p .agents/skills
-cp -r npu-smi .agents/skills/
-cp -r hccl-test .agents/skills/
-cp -r atc-model-converter .agents/skills/
-
-# User-level
-cp -r npu-smi ~/.agents/skills/
-cp -r hccl-test ~/.agents/skills/
-cp -r atc-model-converter ~/.agents/skills/
-```
-
-### Cursor
-
-```bash
-# Project-level
-mkdir -p .cursor/skills
-cp -r npu-smi .cursor/skills/
-cp -r hccl-test .cursor/skills/
-cp -r atc-model-converter .cursor/skills/
-
-# User-level
-cp -r npu-smi ~/.cursor/skills/
-cp -r hccl-test ~/.cursor/skills/
-cp -r atc-model-converter ~/.cursor/skills/
-```
+This command will install all skills from this repository to your AI coding tool (Claude Code, OpenCode, Codex, Cursor, etc.)
 
 ## Structure
 
