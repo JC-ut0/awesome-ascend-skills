@@ -28,6 +28,25 @@ dmidecode -t system | head -20 | grep Product
 | Atlas A3 训练系列产品/Atlas A3 推理系列产品 | 32K | AlltoAll/AlltoAllV 最大 8K |
 | Atlas 300I Duo 推理卡 | - | - |
 
+### 支持的集合通信算子
+
+HCCL Test 工具支持以下 10 种集合通信算子测试：
+
+| 算子 | 可执行文件 | 通信模式 | 适用场景 |
+|------|-----------|---------|---------|
+| **AllReduce** | `all_reduce_test` | 多对多 | 梯度聚合、参数同步 |
+| **AllGather** | `all_gather_test` | 多对多 | 数据聚合、参数收集 |
+| **AllGatherV** | `all_gatherv_test` | 多对多 | 变长数据聚合 |
+| **AlltoAll** | `alltoall_test` | 多对多 | 数据重排、负载均衡 |
+| **AlltoAllV** | `alltoallv_test` | 多对多 | 变长数据全对全通信 |
+| **Broadcast** | `broadcast_test` | 一对多 | 配置分发、初始化 |
+| **Reduce** | `reduce_test` | 多对一 | 结果收集到根节点 |
+| **ReduceScatter** | `reduce_scatter_test` | 多对多 | 归约后分发 |
+| **ReduceScatterV** | `reduce_scatterv_test` | 多对多 | 变长归约后分发 |
+| **Scatter** | `scatter_test` | 一对多 | 数据分发 |
+
+> **选择建议**: 分布式训练场景最常用的是 **AllReduce**（梯度聚合）和 **AllGather**（参数同步）。
+
 ## Quick Reference
 
 ```bash
@@ -187,6 +206,36 @@ make MPI_HOME=/usr/local/openmpi ASCEND_DIR=${INSTALL_DIR}
 ---
 
 ## 3. Tool Execution
+
+### Pre-test Checklist
+
+执行 HCCL Test 前，请确保完成以下检查：
+
+#### 1. 清理残余进程
+
+> **重要**: 如果之前测试异常退出，可能会有残余进程影响本次测试。
+
+```bash
+# 检查是否有残余的 hccl_test 进程
+ps aux | grep -E "(all_reduce_test|all_gather_test|mpirun)"
+
+# 清理残余进程（MPICH）
+mpirun -f hostfile -n 8 pkill -9 -f "all_reduce_test|all_gather_test|mpirun"
+
+# 清理残余进程（Open MPI）
+mpirun -hostfile hostfile -n 8 pkill -9 -f "all_reduce_test|all_gather_test|openmpi"
+```
+
+**常见问题**: 如果首次运行出现 `Process 0 HcclGetRootInfo failed` 或 `retcode: 7` 错误，通常是因为残余进程干扰，请先执行清理命令。
+
+#### 2. 环境检查清单
+
+| 检查项 | 命令 | 预期结果 |
+|-------|------|---------|
+| NPU 状态 | `npu-smi info` | 所有 NPU 显示 OK |
+| MPI 环境 | `which mpirun` | 显示 mpirun 路径 |
+| HCCL Test 工具 | `ls ${INSTALL_DIR}/tools/hccl_test/bin/` | 显示 10 个可执行文件 |
+| 防火墙状态 | `systemctl status firewalld` | 建议关闭 |
 
 ### Prerequisites
 
@@ -393,6 +442,27 @@ data_size      avg_time(us)    alg_bandwidth(GB/s)    check_result
 | Prod | AllReduce, Reduce, ReduceScatter | 6 | 14 | 30 | 62 | 127 | 15 | 127 |
 | Sum | AllReduce, Reduce, ReduceScatter | 63 | 16383 | ~1e9 | ~1e18 | ~1e6 | 511 | 63 |
 | Sum | ReduceScatterV | 11 | 181 | 46340 | ~1e9 | 2896 | 31 | 11 |
+
+### Quick Verification Script
+
+使用快速验证脚本一次性测试所有算子：
+
+```bash
+# 使用默认配置测试 4 卡
+./scripts/quick-verify.sh
+
+# 测试 8 卡
+./scripts/quick-verify.sh 8
+
+# 使用 Open MPI 测试 4 卡
+./scripts/quick-verify.sh 4 openmpi
+```
+
+脚本会自动：
+1. 检查环境（MPI、CANN、NPU）
+2. 清理残余进程
+3. 顺序测试所有 10 个算子
+4. 输出测试汇总结果
 
 ### Parse Results
 
