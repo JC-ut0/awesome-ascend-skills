@@ -1,6 +1,6 @@
 # Awesome Ascend Skills
 
-华为昇腾 NPU 开发的 AI Agent 知识库，以 Skill 形式组织，支持 Claude Code、OpenCode、Cursor、Trae、Codex 等多种 AI 编程工具。
+基于华为昇腾 NPU 开发的 AI Agent 知识库，以 Skill 形式组织，支持 Claude Code、OpenCode、Cursor、Trae、Codex 等多种 AI 编程工具。
 
 ---
 
@@ -26,13 +26,6 @@
 ## 简介
 
 **Awesome Ascend Skills** 是一套面向华为昇腾 NPU 开发的结构化知识库。每个 Skill 都是独立的 AI Agent 能力模块，涵盖设备管理、模型转换、性能测试、量化压缩、推理部署等场景。
-
-### 核心特性
-
-- **模块化设计**：每个 Skill 独立管理，按需加载
-- **渐进式披露**：核心内容在 SKILL.md，详细文档在 references/
-- **多工具支持**：兼容主流 AI 编程工具
-- **持续验证**：自动化检查 Skill 格式规范
 
 ---
 
