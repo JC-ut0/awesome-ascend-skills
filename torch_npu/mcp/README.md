@@ -7,11 +7,28 @@
 在 `mcp` 目录下执行：
 
 ```bash
-cd .cursor/skills/torch-npu/mcp
+cd awesome-ascend-skills/torch_npu/mcp
 npm install
 ```
 
-（若项目根为 `KernelCode`，则路径为 `d:\Desktop\KernelCode\.cursor\skills\torch-npu\mcp`）
+（若 skill 在 `.cursor/skills/torch-npu/` 下，则路径为 `.cursor/skills/torch-npu/mcp`）
+
+### Windows：PowerShell 禁止运行脚本时
+
+若报错「无法加载文件 npm.ps1，因为在此系统上禁止运行脚本」，可任选其一：
+
+1. **不改策略，直接用 cmd 版**（推荐）：
+   ```powershell
+   cd awesome-ascend-skills\torch_npu\mcp
+   npm.cmd install
+   ```
+   之后若用 npx 也改为 `npx.cmd`。
+
+2. **放宽当前用户执行策略**（仅当前用户，需管理员权限时以管理员打开 PowerShell）：
+   ```powershell
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+   ```
+   然后即可正常使用 `npm`、`npx`。
 
 ## 配置 Cursor MCP
 

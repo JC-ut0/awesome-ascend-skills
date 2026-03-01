@@ -2,3 +2,4 @@ node_modules/
 fetched_docs/
 *.log
 .env
+package-lock.json
